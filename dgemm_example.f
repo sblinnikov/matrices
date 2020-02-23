@@ -1,10 +1,13 @@
       PROGRAM   MAIN
 
 ! Compile and Link Your Code
+
 ! Intel MKL provides many options for creating code for multiple processors and operating systems, compatible with different compilers and third-party libraries, and with different interfaces.
 !
-! Define directory where mkl libraries are install, and then
-!  source /opt/intel/mkl2020/bin/compilervars.csh intel64 -platform linux
+! Define directory where mkl libraries are installed, e.g.
+! I have MKL in HOMEMKL=/opt/intel/mkl2020
+! and then
+!  source $HOMEMKL/bin/compilervars.csh intel64 -platform linux
 !
 ! To compile and link the exercises in this tutorial with Intel® Composer XE, type
 !

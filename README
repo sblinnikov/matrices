@@ -1,0 +1,53 @@
+This directory has a few examples demonstrating the work with matrices.
+
+MKL
+
+Define directory where mkl libraries are installed, e.g.
+I have MKL in HOMEMKL=/opt/intel/mkl2020
+and then
+ source $HOMEMKL/bin/compilervars.csh intel64 -platform linux
+
+check:
+echo ${MKLROOT}
+
+
+dgemm_example.f  has a commented example to
+compute real matrix C=alpha*A*B+beta*C using Intel® MKL function dgemm
+
+define F95ROOT as MKLROOT, e.g.
+ export F95ROOT=$MKLROOT
+or
+ setenv F95ROOT $MKLROOT
+
+gfortran -fdefault-integer-8 -I${F95ROOT}/include/intel64/ilp64 -m64 -I${MKLROOT}/include dgemm_example.f -o tdgemm.exe ${F95ROOT}/lib/intel64/libmkl_lapack95_ilp64.a -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_gf_ilp64.a ${MKLROOT}/lib/intel64/libmkl_sequential.a ${MKLROOT}/lib/intel64/libmkl_core.a -Wl,--end-group -lpthread -lm -ldl
+
+run:
+
+./tdgemm.exe
+
+
+To find code examples that use Intel® MKL PARDISO routines to solve systems of linear equations,
+unzip the archive file in the examples folder of the Intel® MKL installation directory.
+Code examples will be in the examples/solverc/source folder.
+
+E.g. I have MKL in HOMEMKL=/opt/intel/mkl2020
+
+ls $HOMEMKL/compilers_and_libraries_2020.0.166/linux/mkl/examples
+
+gives
+
+ examples_cluster_c.tgz  examples_core_c.tgz  examples_f95.tgz
+ examples_cluster_f.tgz  examples_core_f.tgz
+
+core_f.txt  has the list of codes from examples_core_f.tgz
+f95.txt has the list of codes from examples_f95.tgz
+
+
+pardiso_unsym_f.f is an example program to show the use of the "PARDISO" routine
+for nonsymmetric linear systems
+
+   gfortran -fdefault-integer-8 -I${F95ROOT}/include/intel64/ilp64 -m64 -I${MKLROOT}/include pardiso_unsym_f.f -o tpardiso.exe ${F95ROOT}/lib/intel64/libmkl_lapack95_ilp64.a -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_gf_ilp64.a ${MKLROOT}/lib/intel64/libmkl_sequential.a ${MKLROOT}/lib/intel64/libmkl_core.a -Wl,--end-group -lpthread -lm -ldl
+
+run
+   ./tpardiso.exe
+
