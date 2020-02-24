@@ -49,7 +49,7 @@ C.. All other variables
 C.. Fill all arrays containing matrix data.
         DATA n /5/, nrhs /1/, maxfct /1/, mnum /1/
         DATA ia /1,4,6,9,12,14/
-        DATA ja 
+        DATA ja
      1  /1,2,  4,
      2   1,2,
      3       3,4,5,
@@ -131,6 +131,6 @@ C.. Back substitution and iterative refinement
         END DO
 C.. Termination and release of memory
         phase = -1 ! release internal memory
-        CALL pardiso (pt, maxfct, mnum, mtype, phase, n, ddum, idum, 
+        CALL pardiso (pt, maxfct, mnum, mtype, phase, n, ddum, idum,
      &  idum, idum, nrhs, iparm, msglvl, ddum, ddum, error)
       END PROGRAM pardiso_unsym

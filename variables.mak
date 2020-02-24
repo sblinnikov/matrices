@@ -30,7 +30,7 @@ endif
 # default
 DEBUG := yes
 PROFILING :=
-LIBRARY := yes
+LIBRARY :=
 
 ## system type ######################################
 SYSTYPE := $(shell (uname -s) 2>/dev/null)
@@ -54,6 +54,7 @@ MAKEDEPEND := fort_depend.py
 
 ## directories ######################################
 BINDIR := .
+SRCDIR := src
 TMPDIR := tmp
 LIBDIR := lib
 OBJDIR := obj
