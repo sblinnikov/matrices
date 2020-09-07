@@ -7,9 +7,15 @@ I have MKL in HOMEMKL=/opt/intel/mkl2020
 and then
  source $HOMEMKL/bin/compilervars.csh intel64 -platform linux
 
-check:
-echo ${MKLROOT}
+If you have full intel parallel studio, this step is not needed after
 
+source /opt/intel/bin/compilervars.csh intel64
+
+check:
+
+ echo ${MKLROOT}
+
+cd src:
 
 dgemm_example.f  has a commented example to
 compute real matrix C=alpha*A*B+beta*C using Intel® MKL function dgemm
@@ -44,9 +50,19 @@ f95.txt has the list of codes from examples_f95.tgz
 
 
 pardiso_unsym_f.f is an example program to show the use of the "PARDISO" routine
-for nonsymmetric linear systems
+for nonsymmetric linear systems, define F95ROOT as described above
+
+cd src:
 
    gfortran -fdefault-integer-8 -I${F95ROOT}/include/intel64/ilp64 -m64 -I${MKLROOT}/include pardiso_unsym_f.f -o tpardiso.exe ${F95ROOT}/lib/intel64/libmkl_lapack95_ilp64.a -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_gf_ilp64.a ${MKLROOT}/lib/intel64/libmkl_sequential.a ${MKLROOT}/lib/intel64/libmkl_core.a -Wl,--end-group -lpthread -lm -ldl
+
+or try this:
+
+   gfortran -m64  -w -fno-second-underscore -fcray-pointer -x f77-cpp-input -I${MKLROOT}/include \
+   ./pardiso_unsym_f.f -x none -Wl,--start-group  "${MKLROOT}/lib/intel64/libmkl_gf_lp64.a" \
+   "${MKLROOT}/lib/intel64/libmkl_gnu_thread.a" "${MKLROOT}/lib/intel64/libmkl_core.a" \
+   -Wl,--end-group -L"${MKLROOT}/../compiler/lib/intel64" -liomp5 -lpthread -lm -ldl -o tpardiso.exe
+
 
 run
    ./tpardiso.exe
