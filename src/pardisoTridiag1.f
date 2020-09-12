@@ -62,6 +62,9 @@ C.. Fill all arrays containing matrix data.
      4   1.000E-03, 2.000E-01, 1.000E-01, 1.000E-03, 2.000E-01,
      5   1.000E-01, 1.000E-03, 2.000E-01, 1.000E-01, 1.000E-03,
      6   2.000E-01, 1.000E-01, 1.000E-03/
+      write(*,'(a,(10f8.3))')'a=',a
+      write(*,'(a,(10i5))')'ia=',ia
+      write(*,'(a,(10i5))')'ja=',ja
 C..
 C.. Setup PARDISO control parameter
 C..
@@ -125,6 +128,7 @@ C.. Back substitution and iterative refinement
             b(i) = 0.301
         END DO
         b(n) =  0.101
+      write(*,'(a,10f8.3)')'b=',b
         CALL pardiso (pt, maxfct, mnum, mtype, phase, n, a, ia, ja,
      &  idum, nrhs, iparm, msglvl, b, x, error)
         WRITE(*,*) 'Solve completed ... '

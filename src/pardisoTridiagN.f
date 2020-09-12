@@ -70,19 +70,22 @@ C.. Fill all arrays containing matrix data.
       allocate(b(1:n)) ! it is a vector of right-hand sides
       read(11,'(a)')char ! this string reads 'anz'
       read(11,*)(a(i),i=1,nnz)   ! read an array of nonzero elements
-      write(*,'(10f8.3)')(a(i),i=1,10)
+      write(*,'(10f8.3)')(a(i),i=1,nnz)
       read(11,'(a)')char ! this string reads 'inoti'-- delete in future
       read(11,'(a)')char ! this string reads 'rhs b'
       read(11,*)(b(i),i=1,n) ! read an array of right-hand sides
-      write(*,'(10f8.3)')(b(i),i=1,10)
+      write(*,'(10f8.3)')(b(i),i=1,n)
       read(11,'(a)')  ! this string reads 'ianz'
       read(11,*)(ia(i),i=1,n+1) ! read the array of the first nonzero positions of elements in line
       write(*,'(10i5)')(ia(i),i=1,n+1)
       read(11,'(a)')char         ! this string reads 'janz'
       read(11,*)(ja(i),i=1,nnz)  ! read an array of column numbers
-      write(*,'(10i5)')(ja(i),i=1,10)
-      pause
+      write(*,'(10i5)')(ja(i),i=1,nnz)
+C      pause
       close(11)
+      write(*,'(a,(10f8.3))')'a=',a
+      write(*,'(a,(10i5))')'ia=',ia
+      write(*,'(a,(10i5))')'ja=',ja
 
 C..
 C.. Setup PARDISO control parameter
@@ -142,6 +145,7 @@ C.. Factorization.
 C.. Back substitution and iterative refinement
         iparm(8) = 2 ! max numbers of iterative refinement steps
         phase = 33 ! only factorization
+      write(*,'(a,10f8.3)')'b=',b
         CALL pardiso (pt, maxfct, mnum, mtype, phase, n, a, ia, ja,
      &  idum, nrhs, iparm, msglvl, b, x, error)
         WRITE(*,*) 'Solve completed ... '
