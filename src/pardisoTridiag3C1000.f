@@ -52,8 +52,8 @@ C.. Fill all arrays containing matrix data.
         DATA nrhs /1/, maxfct /1/, mnum /1/
         INTEGER :: nnz
         character(len=1) :: char
-      open(11,file='SBlcsrTridiag3.dat',action='read')
-         ! here tridiag matrix is NOT  diagonal dominated
+      open(11,file='SBlcsrTridiag3C1000.dat',action='read')
+         ! here tridiag matrix is diagonal dominated
          ! matrix reading in Compressed Row Storage (CRS) format
       read(11,*)n,nnz	! reading from the input file
         !  n is the number of rows,
