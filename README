@@ -91,3 +91,13 @@ gfortran -m64 -w -fno-second-underscore -fcray-pointer -x f77-cpp-input -I${MKLR
 or
 ifort -I${MKLROOT}/include ./pardisoTridiag3.f -Wl,--start-group "${MKLROOT}/lib/intel64/libmkl_gf_lp64.a" "${MKLROOT}/lib/intel64/libmkl_gnu_thread.a" "${MKLROOT}/lib/intel64/libmkl_core.a" -Wl,--end-group -L"${MKLROOT}/../compiler/lib/intel64" -liomp5 -lpthread -lm -ldl -o tpardisoTridiag3.exe
 
+only in mkl2020:
+
+mkl2020 # aliased to e.g.
+source /opt/intel/mkl2020/compilers_and_libraries_2020.3.279/linux/mkl/bin/mklvars.csh intel64
+
+ifort -I${MKLROOT}/include mkl_spblas.f90 fgmres_no_precon_f.f90 -Wl,--start-group "${MKLROOT}/lib/intel64/libmkl_gf_lp64.a" "${MKLROOT}/lib/intel64/libmkl_gnu_thread.a" "${MKLROOT}/lib/intel64/libmkl_core.a" -Wl,--end-group -L"${MKLROOT}/../compiler/lib/intel64" -liomp5 -lpthread -lm -ldl -o gmres_no_precon_f.exe
+
+ifort -I${MKLROOT}/include mkl_spblas.f90 fgmresTridiag1.f90 -Wl,--start-group "${MKLROOT}/lib/intel64/libmkl_gf_lp64.a" "${MKLROOT}/lib/intel64/libmkl_gnu_thread.a" "${MKLROOT}/lib/intel64/libmkl_core.a" -Wl,--end-group -L"${MKLROOT}/../compiler/lib/intel64" -liomp5 -lpthread -lm -ldl -o fgmresTridiag1.exe
+
+-- the same for Tridiag3, but nor convergence with slight perturbations of expected solution
