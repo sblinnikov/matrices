@@ -49,19 +49,44 @@ C.. All other variables
         INTEGER i, idum(1)
         REAL*8  ddum(1)
 C.. Fill all arrays containing matrix data.
-        DATA n /10/, nrhs /1/, maxfct /1/, mnum /1/
-        DATA ia /1, 3, 6, 9, 12, 15, 18, 21, 24, 27, 29/
-        DATA ja
-     1  /1, 2, 1, 2, 3, 2, 3, 4, 3, 4,
-     2   5, 4, 5, 6, 5, 6, 7, 6, 7, 8,
-     3   7, 8, 9, 8, 9,10, 9,10/
-        DATA a
-     1  /1.000E-03, 2.000E-01, 1.000E-01, 1.000E-03, 2.000E-01,
-     2   1.000E-01, 1.000E-03, 2.000E-01, 1.000E-01, 1.000E-03,
-     3   2.000E-01, 1.000E-01, 1.000E-03, 2.000E-01, 1.000E-01,
-     4   1.000E-03, 2.000E-01, 1.000E-01, 1.000E-03, 2.000E-01,
-     5   1.000E-01, 1.000E-03, 2.000E-01, 1.000E-01, 1.000E-03,
-     6   2.000E-01, 1.000E-01, 1.000E-03/
+        DATA nrhs /1/, maxfct /1/, mnum /1/
+!         version with DATA works:
+!         DATA n /10/, nrhs /1/, maxfct /1/, mnum /1/
+!         DATA ia /1, 3, 6, 9, 12, 15, 18, 21, 24, 27, 29/
+!         DATA ja
+!      1  /1, 2, 1, 2, 3, 2, 3, 4, 3, 4,
+!      2   5, 4, 5, 6, 5, 6, 7, 6, 7, 8,
+!      3   7, 8, 9, 8, 9,10, 9,10/
+!         DATA a
+!      1  /1.000E-03, 2.000E-01, 1.000E-01, 1.000E-03, 2.000E-01,
+!      2   1.000E-01, 1.000E-03, 2.000E-01, 1.000E-01, 1.000E-03,
+!      3   2.000E-01, 1.000E-01, 1.000E-03, 2.000E-01, 1.000E-01,
+!      4   1.000E-03, 2.000E-01, 1.000E-01, 1.000E-03, 2.000E-01,
+!      5   1.000E-01, 1.000E-03, 2.000E-01, 1.000E-01, 1.000E-03,
+!      6   2.000E-01, 1.000E-01, 1.000E-03/
+        INTEGER :: nnz ! this is not needed in pardiso test with DATA
+        character(len=1) :: char ! this is not needed in pardiso test with DATA
+      open(11,file='SBlcsrTridiag1.dat',action='read') ! this is not needed in pardiso test with DATA
+         ! matrix reading in Compressed Row Storage (CRS) format
+      read(11,*)n,nnz	! reading from the input file
+        !  n is the number of rows,
+        !  nnz is the number of nonzero elements of the matrix
+      write(*,*)n,nnz
+      read(11,'(a)')char ! this string reads 'anz'
+      read(11,*)(a(i),i=1,nnz)   ! read an array of nonzero elements
+      write(*,'(10f8.3)')(a(i),i=1,nnz)
+      read(11,'(a)')char ! this string reads 'rhs b'
+      read(11,*)(b(i),i=1,n) ! read an array of right-hand sides
+      write(*,'(10f8.3)')(b(i),i=1,n)
+      read(11,'(a)')  ! this string reads 'ianz'
+      read(11,*)(ia(i),i=1,n+1) ! read the array of the first nonzero positions of elements in line
+      write(*,'(10i5)')(ia(i),i=1,n+1)
+      read(11,'(a)')char         ! this string reads 'janz'
+      read(11,*)(ja(i),i=1,nnz)  ! read an array of column numbers
+      write(*,'(10i5)')(ja(i),i=1,nnz)
+C      pause
+      close(11)
+
       write(*,'(a,(10f8.3))')'a=',a
       write(*,'(a,(10i5))')'ia=',ia
       write(*,'(a,(10i5))')'ja=',ja
@@ -123,11 +148,11 @@ C.. Factorization.
 C.. Back substitution and iterative refinement
         iparm(8) = 2 ! max numbers of iterative refinement steps
         phase = 33 ! only factorization
-        b(1) =  0.201
-        DO i = 2, n-1
-            b(i) = 0.301
-        END DO
-        b(n) =  0.101
+!         b(1) =  0.201
+!         DO i = 2, n-1
+!             b(i) = 0.301
+!         END DO
+!         b(n) =  0.101
       write(*,'(a,10f8.3)')'b=',b
         CALL pardiso (pt, maxfct, mnum, mtype, phase, n, a, ia, ja,
      &  idum, nrhs, iparm, msglvl, b, x, error)

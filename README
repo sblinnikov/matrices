@@ -71,7 +71,7 @@ run
 Another example for 3-diagonal N=10 matrix:
 
 gfortran -m64 -w -fno-second-underscore -fcray-pointer -x f77-cpp-input -I${MKLROOT}/include ./pardisoTridiag1.f -x none -Wl,--start-group "${MKLROOT}/lib/intel64/libmkl_gf_lp64.a" "${MKLROOT}/lib/intel64/libmkl_gnu_thread.a" "${MKLROOT}/lib/intel64/libmkl_core.a" -Wl,--end-group -L"${MKLROOT}/../compiler/lib/intel64" -liomp5 -lpthread -lm -ldl -o tpardisoTridiag1.exe
-or 
+or
 ifort -I${MKLROOT}/include ./pardisoTridiag1.f -Wl,--start-group "${MKLROOT}/lib/intel64/libmkl_gf_lp64.a" "${MKLROOT}/lib/intel64/libmkl_gnu_thread.a" "${MKLROOT}/lib/intel64/libmkl_core.a" -Wl,--end-group -L"${MKLROOT}/../compiler/lib/intel64" -liomp5 -lpthread -lm -ldl -o tpardisoTridiag1.exe
 
 For arbitrary N
@@ -80,3 +80,14 @@ reading form files like SBlcsrTridiag{N}.dat, rename it to SBlcsrTridiagN.dat
 gfortran -m64 -w -fno-second-underscore -fcray-pointer -x f77-cpp-input -I${MKLROOT}/include ./pardisoTridiagN.f -x none -Wl,--start-group "${MKLROOT}/lib/intel64/libmkl_gf_lp64.a" "${MKLROOT}/lib/intel64/libmkl_gnu_thread.a" "${MKLROOT}/lib/intel64/libmkl_core.a" -Wl,--end-group -L"${MKLROOT}/../compiler/lib/intel64" -liomp5 -lpthread -lm -ldl -o tpardisoTridiagN.exe
 or
 ifort -I${MKLROOT}/include ./pardisoTridiagN.f -Wl,--start-group "${MKLROOT}/lib/intel64/libmkl_gf_lp64.a" "${MKLROOT}/lib/intel64/libmkl_gnu_thread.a" "${MKLROOT}/lib/intel64/libmkl_core.a" -Wl,--end-group -L"${MKLROOT}/../compiler/lib/intel64" -liomp5 -lpthread -lm -ldl -o tpardisoTridiagN.exe
+
+The code
+ pardisoTridiagN.f
+fails with segmentation fault due to allocation statements
+
+pardisoTridiag3.f with fixed array dimensions for N=1000 works, but produces bad results like MUMPS and our m28y12.f:
+
+gfortran -m64 -w -fno-second-underscore -fcray-pointer -x f77-cpp-input -I${MKLROOT}/include ./pardisoTridiag3.f -x none -Wl,--start-group "${MKLROOT}/lib/intel64/libmkl_gf_lp64.a" "${MKLROOT}/lib/intel64/libmkl_gnu_thread.a" "${MKLROOT}/lib/intel64/libmkl_core.a" -Wl,--end-group -L"${MKLROOT}/../compiler/lib/intel64" -liomp5 -lpthread -lm -ldl -o tpardisoTridiag3.exe
+or
+ifort -I${MKLROOT}/include ./pardisoTridiag3.f -Wl,--start-group "${MKLROOT}/lib/intel64/libmkl_gf_lp64.a" "${MKLROOT}/lib/intel64/libmkl_gnu_thread.a" "${MKLROOT}/lib/intel64/libmkl_core.a" -Wl,--end-group -L"${MKLROOT}/../compiler/lib/intel64" -liomp5 -lpthread -lm -ldl -o tpardisoTridiag3.exe
+
